@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react'
 import DitherField from './components/DitherField.jsx'
 import DitherReveal from './components/DitherReveal.jsx'
 import { Countdown, DitherHeading, Kicker, RegisterButton, getStage, useNow } from './components/bits.jsx'
-import { HackathonDoodle, Laurel, PixelTrophy, Rays, useInView } from './components/pixel.jsx'
-import { FAQS, IMG, POLL, PRIZE_TIERS, TIMELINE } from './data.js'
+import { HackathonDoodle, Laurel, PixelIcon, PixelTrophy, Rays, useInView } from './components/pixel.jsx'
+import { FAQS, IMG, MENTORS, POLL, PRIZE_TIERS, TIMELINE } from './data.js'
 
 const NAV = [
   ['about', 'About'],
   ['timeline', 'Timeline'],
   ['prizes', 'Prizes'],
+  ['mentors', 'Mentors'],
   ['format', 'Format'],
   ['faq', 'FAQ'],
 ]
@@ -400,6 +401,46 @@ function Prizes() {
   )
 }
 
+function Mentors() {
+  return (
+    <section className="section mentors" id="mentors">
+      <div className="container">
+        <header className="poster-head">
+          <Kicker n="05">mentors</Kicker>
+          <h2 className="poster-head__title">
+            mentors
+            <Rays className="poster-head__rays" />
+          </h2>
+          <p className="poster-head__sub">
+            <span>Guidance, Support &amp; Real-World Insights</span>
+          </p>
+        </header>
+
+        <div className="mentor-grid">
+          {MENTORS.map((m) => (
+            <article key={m.name} className="mentor">
+              <div className="mentor__portrait">
+                <Laurel />
+                <img src={m.avatar} alt={`Pixel-art portrait of ${m.name}`} />
+                <Laurel flip />
+              </div>
+              <h3 className="mentor__name">{m.name}</h3>
+              <ul className="mentor__points">
+                {m.points.map((pt) => (
+                  <li key={pt.text}>
+                    <PixelIcon name={pt.icon} className={`mentor__icon mentor__icon--${pt.icon}`} />
+                    <span>{pt.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 const STEPS = [
   ['Register', 'Fill in the Google Form with your team (max 3 members) before 5 PM on Nov 18.'],
   ['Pick a problem', 'At 6 PM on Nov 18, the statements go live. Choose the open source problem your team wants to own.'],
@@ -413,7 +454,7 @@ function Format() {
     <section className="section format" id="format">
       <DitherReveal src={IMG.cloud2} className="format__cloud drift-b" cell={6} />
       <div className="container">
-        <Kicker n="05">format</Kicker>
+        <Kicker n="06">format</Kicker>
         <DitherHeading>How it works</DitherHeading>
         <div className="steps">
           {STEPS.map(([title, body], i) => (
@@ -442,7 +483,7 @@ function Faq() {
     <section className="section faq" id="faq">
       <div className="container faq__grid">
         <div>
-          <Kicker n="06">faq</Kicker>
+          <Kicker n="07">faq</Kicker>
           <DitherHeading>Questions?</DitherHeading>
           <p className="section__sub">Everything else gets answered once you register.</p>
           <img src={IMG.steve} alt="" className="faq__steve bob" />
@@ -504,7 +545,7 @@ function FinalCta({ now }) {
     <section className="final" id="register">
       <div className="final__inner container">
         <p className="kicker kicker--center">
-          <span className="kicker__n">07</span>
+          <span className="kicker__n">08</span>
           <span className="kicker__slash">/</span>register
         </p>
         <DitherHeading className="final__title">Your 24 hours start Nov 18.</DitherHeading>
@@ -564,6 +605,7 @@ export default function App() {
         <Poll />
         <Timeline now={now} />
         <Prizes />
+        <Mentors />
         <Format />
         <Faq />
         <Partners />

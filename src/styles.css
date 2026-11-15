@@ -1259,7 +1259,8 @@ a {
   max-width: 900px;
   margin: 52px auto 0;
 }
-.tier {
+.tier,
+.mentor {
   position: relative;
   overflow: hidden;
   padding: 24px clamp(18px, 3vw, 32px) 64px;
@@ -1268,7 +1269,8 @@ a {
   background: #fff;
   color: var(--blue);
 }
-.tier::after {
+.tier::after,
+.mentor::after {
   content: '';
   position: absolute;
   left: 0;
@@ -1440,6 +1442,75 @@ a {
   display: flex;
   justify-content: center;
   margin-top: 36px;
+}
+
+/* mentors ("mentors" frame) */
+.mentor-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 3vw, 32px);
+  max-width: 900px;
+  margin: 52px auto 0;
+}
+.mentor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+.mentor__portrait {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 3vw, 28px);
+}
+.mentor__portrait .laurel {
+  width: 30px;
+  flex: none;
+  margin-top: -24px;
+}
+.mentor__portrait img {
+  width: clamp(130px, 16vw, 168px);
+  height: auto;
+}
+.mentor__name {
+  margin: 0 0 18px;
+  padding: 4px 24px;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 6px;
+  font-family: var(--f-tiny);
+  font-weight: 400;
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.25;
+  white-space: nowrap;
+}
+.mentor__points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mentor__points li {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--f-serif);
+  font-weight: 500;
+  font-size: clamp(18px, 1.9vw, 21px);
+  line-height: 1.25;
+  color: var(--ink);
+}
+.mentor__icon {
+  justify-self: center;
+  width: 30px;
+  color: var(--blue);
+}
+.mentor__icon--trophy {
+  width: 32px;
 }
 
 /* format */
@@ -1863,6 +1934,10 @@ a {
   }
   .poll__stats {
     grid-template-columns: 1fr;
+  }
+  .mentor-grid {
+    grid-template-columns: 1fr;
+    margin-top: 40px;
   }
   .sketch__item {
     grid-template-columns: 22px 92px 1fr;

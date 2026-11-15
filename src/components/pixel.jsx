@@ -84,6 +84,48 @@ export function PixelTrophy({ star = false, className = '', title }) {
   return <PixelArt map={star ? TROPHY_STAR : TROPHY} className={className} title={title} />
 }
 
+const BRIEFCASE = [
+  '....111111....',
+  '....1....1....',
+  '11111111111111',
+  '1............1',
+  '1............1',
+  '111111..111111',
+  '1....1111....1',
+  '1............1',
+  '1............1',
+  '11111111111111',
+]
+
+const GRAD_CAP = [
+  '.......11.......',
+  '.....111111.....',
+  '...1112222111...',
+  '.11122222222111.',
+  '.11122222222111.',
+  '...1112222111.1.',
+  '...1..1111..1.1.',
+  '...1........1.1.',
+  '....11111111..1.',
+]
+
+const CODE = [
+  '...1.......1.1...',
+  '..1.......1...1..',
+  '.1.......1.....1.',
+  '1.......1.......1',
+  '.1.....1.......1.',
+  '..1...1.......1..',
+  '...1.1.......1...',
+]
+
+/** Small outlined icons for mentor cards. */
+export function PixelIcon({ name, className = '' }) {
+  if (name === 'trophy') return <PixelTrophy className={className} />
+  const map = name === 'work' ? BRIEFCASE : name === 'grad' ? GRAD_CAP : CODE
+  return <PixelArt map={map} className={className} />
+}
+
 /** Laurel branch; `flip` mirrors it for the right-hand side. */
 export function Laurel({ flip = false, className = '' }) {
   const leaves = [

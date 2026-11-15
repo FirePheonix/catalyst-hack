@@ -69,6 +69,29 @@ export const PRIZE_TIERS = [
   },
 ]
 
+// "Mentors" frame. icon: trophy | code | work | grad
+export const MENTORS = [
+  {
+    name: 'Shubham Singh',
+    avatar: '/images/web/mentor-shubham.webp',
+    points: [
+      { icon: 'trophy', text: '4 time hackathon winner' },
+      { icon: 'code', text: 'GSoC’25 – Sugarlabs' },
+      { icon: 'code', text: 'GSoC’26 – NumFocus' },
+      { icon: 'grad', text: '3rd year' },
+    ],
+  },
+  {
+    name: 'Rohan Tewari',
+    avatar: '/images/web/mentor-rohan.webp',
+    points: [
+      { icon: 'work', text: 'Ex intern – IIT KGP' },
+      { icon: 'trophy', text: '2x hackathon winner' },
+      { icon: 'grad', text: '3rd year' },
+    ],
+  },
+]
+
 // "We ran a poll" frame.
 export const POLL = { yes: 100, no: 19, asked: 150 }
 
