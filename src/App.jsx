@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import DitherField from './components/DitherField.jsx'
 import DitherReveal from './components/DitherReveal.jsx'
 import { Countdown, DitherHeading, Kicker, RegisterButton, getStage, useNow } from './components/bits.jsx'
-import { FAQS, IMG, PHASES } from './data.js'
+import { HackathonDoodle, Laurel, PixelTrophy, Rays, useInView } from './components/pixel.jsx'
+import { FAQS, IMG, POLL, PRIZE_TIERS, TIMELINE } from './data.js'
 
 const NAV = [
   ['about', 'About'],
@@ -53,16 +54,16 @@ function ScheduleList({ className = '' }) {
   return (
     <ul className={`schedule ${className}`}>
       <li>
-        <b>Nov 17</b>
-        <span>Problem statements revealed · 12 noon</span>
+        <b>Nov 18</b>
+        <span>Problem Statements Revealed</span>
       </li>
       <li>
         <b>Nov 19</b>
-        <span>Build round ends · 12 noon</span>
+        <span>Hackathon Build Phase Ends</span>
       </li>
       <li>
         <b>Nov 20</b>
-        <span>Offline pitching round & results</span>
+        <span>Pitching Round & Results</span>
       </li>
     </ul>
   )
@@ -100,7 +101,7 @@ function Hero({ now }) {
           <DitherReveal src={IMG.wordmark} cell={5} duration={1000} delay={150} eager />
         </h1>
         <p className="hero__tagline">
-          48 hours hackathon to solve the
+          24 hours hackathon to solve the
           <br />
           biggest open source problems
         </p>
@@ -120,7 +121,7 @@ function Hero({ now }) {
 }
 
 function Marquee() {
-  const items = ['catalyst', '48 hours', 'open source', 'nov 17 → 20', 'build', 'ship', 'pitch', 'prizes for top 3', 'register now']
+  const items = ['catalyst', '24 hours', 'open source', 'nov 18 → 20', 'build', 'submit', 'pitch', 'up to ₹15,000 in prizes', 'register now']
   const row = items.map((t, i) => (
     <span key={i}>
       {t}
@@ -146,13 +147,13 @@ function About() {
           <Kicker n="01">about</Kicker>
           <DitherHeading>What is catalyst?</DitherHeading>
           <p className="lead">
-            A <em>48-hour hackathon</em> where you take on the biggest problems in open source: the bugs nobody fixed,
+            A <em>24-hour hackathon</em> where you take on the biggest problems in open source: the bugs nobody fixed,
             the tools nobody built, and the rough edges every developer trips over.
           </p>
           <p className="body">
-            Problem statements drop at <b>12 noon on Nov 17</b>. From that moment you have exactly 48 hours to build a
-            working solution. On <b>Nov 20</b>, the best teams pitch their work offline, in front of the judges, and the
-            results are announced the same day.
+            Registrations close at <b>5 PM on Nov 18</b> and the problem statements drop an hour later, at <b>6 PM</b>.
+            From that moment you have 24 hours to build a working solution. On <b>Nov 20</b>, the top 10 shortlisted
+            teams pitch offline, on campus, and the results and prize ceremony follow the same day.
           </p>
           <div className="about__cta">
             <RegisterButton />
@@ -163,20 +164,20 @@ function About() {
           <DitherReveal src={IMG.statue} className="about__statue" cell={6} />
           <div className="stats">
             <div className="stat">
-              <span className="stat__num">48</span>
+              <span className="stat__num">24</span>
               <span className="stat__label">hours to build</span>
             </div>
             <div className="stat">
               <span className="stat__num">03</span>
-              <span className="stat__label">rounds</span>
+              <span className="stat__label">max per team</span>
             </div>
             <div className="stat">
-              <span className="stat__num">01</span>
-              <span className="stat__label">offline pitch day</span>
+              <span className="stat__num">10</span>
+              <span className="stat__label">teams pitch on campus</span>
             </div>
             <div className="stat">
-              <span className="stat__num">∞</span>
-              <span className="stat__label">commits allowed</span>
+              <span className="stat__num">15K</span>
+              <span className="stat__label">₹ max prize pool</span>
             </div>
           </div>
         </div>
@@ -185,47 +186,134 @@ function About() {
   )
 }
 
-function phaseStatus(phase, now) {
-  if (now >= phase.end && phase.end > phase.start) return 'done'
-  if (phase.end.getTime() === phase.start.getTime()) return now >= phase.start ? 'done' : 'upcoming'
-  if (now >= phase.start) return 'live'
-  return 'upcoming'
+function Poll() {
+  const [ref, inView] = useInView()
+  const total = POLL.yes + POLL.no
+  const yesPct = Math.round((POLL.yes / total) * 100)
+  const noPct = 100 - yesPct
+  return (
+    <section className="section poll" id="poll">
+      <div className={`container poll__grid ${inView ? 'is-in' : ''}`} ref={ref}>
+        <div className="poll__visual">
+          <Rays className="poll__rays poll__rays--l" />
+          <Rays className="poll__rays poll__rays--r" />
+          <div className="wa" role="img" aria-label={`Poll: willing to participate in the hackathon? Yes ${POLL.yes}, No ${POLL.no}`}>
+            <div className="wa__head">
+              <img src={IMG.techsoc} alt="" />
+              <div>
+                <b>Technical Society</b>
+                <span>Community admin</span>
+              </div>
+            </div>
+            <p className="wa__q">Willing to participate in Hackathon next week.</p>
+            <p className="wa__meta">Select one · Names hidden</p>
+            <div className="wa__opt">
+              <span className="wa__tick" aria-hidden="true">✓</span>
+              <span className="wa__label">Yes</span>
+              <span className="wa__count">{POLL.yes}</span>
+              <span className="wa__bar">
+                <i style={{ '--w': `${yesPct}%` }} />
+              </span>
+            </div>
+            <div className="wa__opt">
+              <span className="wa__radio" aria-hidden="true" />
+              <span className="wa__label">No</span>
+              <span className="wa__count">{POLL.no}</span>
+              <span className="wa__bar">
+                <i style={{ '--w': `${noPct}%` }} />
+              </span>
+            </div>
+            <p className="wa__votes">View votes</p>
+          </div>
+          <p className="wa__tag">
+            <span className="wa__dot" aria-hidden="true" />
+            Poll response · Technical Society’s WhatsApp group
+          </p>
+        </div>
+
+        <div className="poll__copy">
+          <Kicker n="02">hype check</Kicker>
+          <h2 className="poll__title">
+            We ran a poll in <mark>Technical Society’s WhatsApp Group</mark>
+          </h2>
+          <p className="poll__sub">
+            to gauge interest for our <span className="poll__chip">&lt;/&gt; Intra-College Hackathon</span>
+          </p>
+          <div className="poll__stats">
+            <div className="poll__stat poll__stat--yes">
+              <b>
+                {POLL.yes} <i aria-hidden="true">✓</i>
+              </b>
+              <span>Students interested</span>
+            </div>
+            <div className="poll__stat poll__stat--no">
+              <b>
+                {POLL.no} <i aria-hidden="true">✕</i>
+              </b>
+              <span>Students not interested</span>
+            </div>
+          </div>
+          <p className="poll__note">
+            Out of <b>~{POLL.asked}</b> students, <b>{POLL.yes}</b> showed interest in participating, indicating a{' '}
+            <mark>strong and positive response</mark> for the hackathon.
+          </p>
+        </div>
+      </div>
+    </section>
+  )
 }
 
 function Timeline({ now }) {
   const stage = getStage(now)
+  const nextIdx = TIMELINE.findIndex((t) => now < t.doneAt)
   return (
     <section className="section timeline" id="timeline">
+      <div className="timeline__cloud timeline__cloud--l drift-a">
+        <img className="timeline__gopher bob" src={IMG.gopher} alt="" />
+        <DitherReveal src={IMG.cloud1} cell={6} />
+      </div>
+      <div className="timeline__cloud timeline__cloud--r drift-b">
+        <img className="timeline__steve bob bob--late" src={IMG.steve} alt="" />
+        <DitherReveal src={IMG.cloud2} cell={6} />
+      </div>
       <div className="container">
-        <Kicker n="02">timeline</Kicker>
-        <DitherHeading>Three rounds. One clock.</DitherHeading>
-        <p className="section__sub">All times in IST. The 48-hour build clock starts the second the problem statements go live.</p>
-
-        <ol className="phases">
-          {PHASES.map((p) => {
-            const status = phaseStatus(p, now)
-            const span = p.end - p.start
-            const pct = span > 0 ? Math.min(100, Math.max(0, ((now - p.start) / span) * 100)) : status === 'done' ? 100 : 0
-            return (
-              <li key={p.id} className={`phase phase--${status}`}>
-                <div className="phase__top">
-                  <span className="phase__id">{p.id}</span>
-                  <span className={`chip chip--${status}`}>{status === 'live' ? '● live' : status}</span>
-                </div>
-                <p className="phase__kicker">{p.kicker}</p>
-                <h3 className="phase__title">{p.title}</h3>
-                <p className="phase__date">{p.date}</p>
-                <p className="phase__time">{p.time}</p>
-                <p className="phase__body">{p.body}</p>
-                {span > 0 && (
-                  <div className="phase__bar" aria-label={`${Math.round(pct)}% elapsed`}>
-                    <span style={{ width: `${pct}%` }} />
-                  </div>
-                )}
-              </li>
-            )
-          })}
-        </ol>
+        <div className="timeline__kicker">
+          <Kicker n="03">timeline</Kicker>
+        </div>
+        <div className="sketch">
+          <h2 className="sketch__title">
+            <Rays className="sketch__rays sketch__rays--l" />
+            <span>Hackathon Timeline</span>
+            <Rays className="sketch__rays" />
+          </h2>
+          <p className="sketch__intro">
+            Here’s the complete timeline for the Intra-College Hackathon. From registrations to final winners, here’s how
+            it all goes down:
+          </p>
+          <ol className="sketch__list">
+            {TIMELINE.map((t, i) => {
+              const state = nextIdx === -1 || i < nextIdx ? 'done' : i === nextIdx ? 'next' : 'upcoming'
+              return (
+                <li key={i} className={`sketch__item is-${state}`}>
+                  <span className="sketch__node" aria-hidden="true" />
+                  <span className="sketch__date">
+                    <span>
+                      {t.day}
+                      <sup>{t.sup}</sup> Nov
+                    </span>
+                    {t.time && <span>{t.time}</span>}
+                  </span>
+                  <span className="sketch__text">
+                    {t.text}
+                    {state === 'next' && <em className="sketch__next">← up next</em>}
+                    {state === 'done' && <span className="sr-only"> (done)</span>}
+                  </span>
+                </li>
+              )
+            })}
+          </ol>
+          <HackathonDoodle className="sketch__doodle" />
+        </div>
 
         <div className="timeline__now">
           <Countdown now={now} />
@@ -236,63 +324,73 @@ function Timeline({ now }) {
   )
 }
 
-const PRIZES = [
-  { rank: '1', suffix: 'st', label: 'Winner', tier: 'gold' },
-  { rank: '2', suffix: 'nd', label: 'Runner up', tier: 'silver' },
-  { rank: '3', suffix: 'rd', label: 'Second runner up', tier: 'bronze' },
-]
-
 function Prizes() {
   return (
     <section className="section prizes" id="prizes">
       <div className="container">
-        <Kicker n="03">prizes</Kicker>
-        <DitherHeading>Prize pool: ???</DitherHeading>
-        <p className="section__sub">
-          The prize money isn’t fixed yet. <b>It grows with participation</b>: the more teams that register, the
-          bigger the pool. Once registrations close, the final amount is announced and split across the top 3.
-        </p>
+        <header className="poster-head">
+          <Kicker n="04">prizes</Kicker>
+          <h2 className="poster-head__title">
+            prize pool
+            <Rays className="poster-head__rays" />
+          </h2>
+          <p className="poster-head__sub">
+            <span>Cash Prizes Based on Participation</span>
+          </p>
+        </header>
 
-        <div className="podium">
-          {PRIZES.map((p) => (
-            <article key={p.rank} className={`podium__slot podium__slot--${p.tier}`}>
-              <div className="podium__card">
-                <p className="podium__label">{p.label}</p>
-                <p className="podium__amount" aria-label="Amount to be announced">
-                  <span className="podium__cur">₹</span>
-                  <span className="podium__q" data-text="?">?</span>
-                </p>
-                <p className="podium__note">to be announced</p>
-              </div>
-              <div className="podium__block">
-                {p.tier === 'gold' && (
-                  <DitherField className="podium__field" mode="rise" pixel={3} strength={1.15} interactive={false} />
-                )}
-                <span className="podium__rank">
-                  {p.rank}
-                  <small>{p.suffix}</small>
-                </span>
-              </div>
+        <div className="tiers">
+          {PRIZE_TIERS.map((tier) => (
+            <article key={tier.teams} className={`tier ${tier.prizes.length > 2 ? 'tier--rows' : 'tier--stack'}`}>
+              <header className="tier__head">
+                <Laurel />
+                <div>
+                  <span className="tier__badge">{tier.teams} Teams</span>
+                  <span className="tier__sub">Participating</span>
+                </div>
+                <Laurel flip />
+              </header>
+              <ul className="tier__list">
+                {tier.prizes.map((p) => (
+                  <li key={p.label}>
+                    <PixelTrophy className="tier__trophy" />
+                    <span className="tier__label">
+                      {p.rank ? (
+                        <>
+                          {p.rank}
+                          <sup>{p.sup}</sup> Prize
+                        </>
+                      ) : (
+                        p.label
+                      )}
+                    </span>
+                    <span className="tier__amt">{p.amount}</span>
+                  </li>
+                ))}
+              </ul>
             </article>
           ))}
         </div>
 
-        <ol className="pool">
-          <li>
-            <span className="pool__n">01</span>
-            <span>More teams register</span>
-          </li>
-          <li aria-hidden="true" className="pool__arrow">→</li>
-          <li>
-            <span className="pool__n">02</span>
-            <span>Prize pool grows</span>
-          </li>
-          <li aria-hidden="true" className="pool__arrow">→</li>
-          <li>
-            <span className="pool__n">03</span>
-            <span>Split across the top 3</span>
-          </li>
-        </ol>
+        <p className="prizes__note">
+          The more teams register, the more prizes unlock: <b>₹10,000</b> at 50 teams, <b>₹15,000</b> at 75 teams.
+        </p>
+
+        <div className="finale" aria-hidden="true">
+          <DitherReveal src={IMG.cloud1} className="finale__cloud finale__cloud--l drift-a" cell={6} />
+          <div className="finale__cloud finale__cloud--r drift-b">
+            <img className="finale__steve bob" src={IMG.steve} alt="" />
+            <DitherReveal src={IMG.cloud2} cell={6} />
+          </div>
+          <div className="finale__center">
+            <div className="finale__cup">
+              <Rays className="finale__rays finale__rays--l" />
+              <Rays className="finale__rays" />
+              <PixelTrophy star className="finale__trophy" />
+            </div>
+            <DitherReveal src={IMG.cloud1} className="finale__mound" cell={6} />
+          </div>
+        </div>
 
         <div className="prizes__cta">
           <RegisterButton label="Grow the pool: register" />
@@ -303,11 +401,11 @@ function Prizes() {
 }
 
 const STEPS = [
-  ['Register', 'Fill in the Google Form with your team details before the problem statements drop.'],
-  ['Pick a problem', 'At 12 noon on Nov 17, statements go live. Choose the open source problem your team wants to own.'],
-  ['Build in the open', 'Spend 48 hours shipping a real, working solution. Push early, push often.'],
-  ['Submit by noon', 'Lock in your project before 12 noon on Nov 19. When the clock hits zero, the build round is over.'],
-  ['Pitch it live', 'Teams present their builds offline on Nov 20. Demo it, defend it, win it.'],
+  ['Register', 'Fill in the Google Form with your team (max 3 members) before 5 PM on Nov 18.'],
+  ['Pick a problem', 'At 6 PM on Nov 18, the statements go live. Choose the open source problem your team wants to own.'],
+  ['Build for 24h', 'Spend 24 hours shipping a real, working solution. Push early, push often.'],
+  ['Submit', 'When the build phase ends at 6 PM on Nov 19, send in a pitch video with a demo, plus your PPT.'],
+  ['Pitch on campus', 'The top 10 shortlisted teams pitch offline on Nov 20. Results and the prize ceremony follow.'],
 ]
 
 function Format() {
@@ -315,7 +413,7 @@ function Format() {
     <section className="section format" id="format">
       <DitherReveal src={IMG.cloud2} className="format__cloud drift-b" cell={6} />
       <div className="container">
-        <Kicker n="04">format</Kicker>
+        <Kicker n="05">format</Kicker>
         <DitherHeading>How it works</DitherHeading>
         <div className="steps">
           {STEPS.map(([title, body], i) => (
@@ -344,7 +442,7 @@ function Faq() {
     <section className="section faq" id="faq">
       <div className="container faq__grid">
         <div>
-          <Kicker n="05">faq</Kicker>
+          <Kicker n="06">faq</Kicker>
           <DitherHeading>Questions?</DitherHeading>
           <p className="section__sub">Everything else gets answered once you register.</p>
           <img src={IMG.steve} alt="" className="faq__steve bob" />
@@ -388,12 +486,12 @@ function Partners() {
             <figcaption>Technical Society</figcaption>
           </figure>
           <figure>
-            <img src={IMG.iiits} alt="IIIT Sonipat logo" />
-            <figcaption>IIIT Sonipat</figcaption>
+            <img src={IMG.iiits} alt="IIIT Sonepat logo" />
+            <figcaption>IIIT Sonepat</figcaption>
           </figure>
           <figure>
-            <img src={IMG.algozenith} alt="AlgoZenith logo" className="partners__az" />
-            <figcaption>AlgoZenith</figcaption>
+            <img src={IMG.algozenith} alt="Algozenith logo" className="partners__az" />
+            <figcaption>Algozenith - IIIT Sonepat</figcaption>
           </figure>
         </div>
       </div>
@@ -406,11 +504,11 @@ function FinalCta({ now }) {
     <section className="final" id="register">
       <div className="final__inner container">
         <p className="kicker kicker--center">
-          <span className="kicker__n">06</span>
+          <span className="kicker__n">07</span>
           <span className="kicker__slash">/</span>register
         </p>
-        <DitherHeading className="final__title">Your 48 hours start Nov 17.</DitherHeading>
-        <p className="final__sub">Grab your spot and lock in your team before the problem statements drop.</p>
+        <DitherHeading className="final__title">Your 24 hours start Nov 18.</DitherHeading>
+        <p className="final__sub">Registrations close at 5 PM on Nov 18. Lock in your team before the problem statements drop.</p>
         <RegisterButton size="xl" />
         <Countdown now={now} />
       </div>
@@ -426,14 +524,15 @@ function Footer() {
       <div className="container footer__inner">
         <div className="footer__brand">
           <span className="footer__word">catalyst</span>
-          <p>A 48-hour open source hackathon by the Technical Society.</p>
+          <p>A 24-hour open source hackathon by the Technical Society.</p>
         </div>
         <div className="footer__cols">
           <div>
             <h4>Dates</h4>
-            <p>Nov 17 · PS reveal, 12 noon</p>
-            <p>Nov 19 · Build ends, 12 noon</p>
-            <p>Nov 20 · Pitch & results</p>
+            <p>Nov 18 · Registration closes, 5 PM</p>
+            <p>Nov 18 · PS reveal, 6 PM</p>
+            <p>Nov 19 · Build ends, 6 PM</p>
+            <p>Nov 20 · Pitch & results, on campus</p>
           </div>
           <div>
             <h4>Jump to</h4>
@@ -462,6 +561,7 @@ export default function App() {
         <Hero now={now} />
         <Marquee />
         <About />
+        <Poll />
         <Timeline now={now} />
         <Prizes />
         <Format />

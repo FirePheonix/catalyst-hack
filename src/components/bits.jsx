@@ -12,8 +12,9 @@ export function useNow(interval = 1000) {
 
 /** Which stage of the event we're in right now. */
 export function getStage(now) {
-  if (now < DATES.psReveal) return { key: 'pre', label: 'Problem statements drop in and registration time ends', target: DATES.psReveal }
-  if (now < DATES.buildEnd) return { key: 'build', label: 'Build round ends in', target: DATES.buildEnd }
+  if (now < DATES.regClose) return { key: 'pre', label: 'Registrations close in', target: DATES.regClose }
+  if (now < DATES.psReveal) return { key: 'closed', label: 'Problem statements drop in', target: DATES.psReveal }
+  if (now < DATES.buildEnd) return { key: 'build', label: '24h build phase ends in', target: DATES.buildEnd }
   if (now < DATES.pitchDay) return { key: 'gap', label: 'Pitching round starts in', target: DATES.pitchDay }
   if (now < DATES.pitchEnd) return { key: 'pitch', label: 'Pitching round is live', target: null }
   return { key: 'over', label: 'That’s a wrap. See you next time', target: null }

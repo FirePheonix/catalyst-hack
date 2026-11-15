@@ -2,53 +2,100 @@
 //  Paste the Google Form link here when it's ready.
 //  While it's empty, every "Register now" button shows "link drops soon".
 // ─────────────────────────────────────────────────────────────
-export const REGISTER_URL = ''
+export const REGISTER_URL = 'https://forms.gle/o4HoboARsKq5L3Mb8'
 
 // All times are IST (UTC+05:30).
 export const DATES = {
-  psReveal: new Date('2026-11-17T12:00:00+05:30'),
-  buildEnd: new Date('2026-11-19T12:00:00+05:30'),
+  regClose: new Date('2026-11-18T17:00:00+05:30'),
+  psReveal: new Date('2026-11-18T18:00:00+05:30'),
+  buildEnd: new Date('2026-11-19T18:00:00+05:30'),
   pitchDay: new Date('2026-11-20T00:00:00+05:30'),
   pitchEnd: new Date('2026-11-21T00:00:00+05:30'),
 }
 
-export const PHASES = [
+// "Hackathon Timeline" frame. `doneAt` is when the step counts as passed.
+export const TIMELINE = [
   {
-    id: '01',
-    kicker: 'Round zero',
-    title: 'Problem statements revealed',
-    date: 'Nov 17',
-    time: '12:00 noon IST',
-    start: DATES.psReveal,
-    end: DATES.psReveal,
-    body: 'The problem statements go live at noon. They come from real open source pain points: bugs, missing tooling and rough edges developers hit every day.',
+    day: '18',
+    sup: 'th',
+    time: '5 PM',
+    text: 'Form last registration date.',
+    doneAt: DATES.regClose,
   },
   {
-    id: '02',
-    kicker: 'Round one',
-    title: 'Build solution round',
-    date: 'Nov 17 → Nov 19',
-    time: '12:00 noon → 12:00 noon',
-    start: DATES.psReveal,
-    end: DATES.buildEnd,
-    body: '48 hours to go from idea to working solution. Pick a problem, write code, commit often and ship something that works before the clock hits zero.',
+    day: '18',
+    sup: 'th',
+    time: '6 PM',
+    text: 'Problem statements revealed.',
+    doneAt: DATES.psReveal,
   },
   {
-    id: '03',
-    kicker: 'Round two',
-    title: 'Pitching round & results',
-    date: 'Nov 20',
-    time: 'Offline',
-    start: DATES.pitchDay,
-    end: DATES.pitchEnd,
-    body: 'Teams pitch their builds in person to the judges. Demos, questions, then the results are announced the same day.',
+    day: '19',
+    sup: 'th',
+    time: '6 PM',
+    text: 'Final submissions open (pitch video (demo) + PPT).',
+    doneAt: DATES.buildEnd,
+  },
+  {
+    day: '20',
+    sup: 'th',
+    text: 'Top 10 shortlisted teams → pitching round (offline, on campus).',
+    doneAt: DATES.pitchEnd,
+  },
+  {
+    day: '20',
+    sup: 'th',
+    text: 'Results declaration and prize ceremony (offline, on campus).',
+    doneAt: DATES.pitchEnd,
   },
 ]
+
+// "Prize pool" frame: cash prizes scale with the number of teams.
+export const PRIZE_TIERS = [
+  {
+    teams: 50,
+    prizes: [
+      { label: '1st Prize', rank: '1', sup: 'st', amount: '₹5,000' },
+      { label: 'Runner-up', amount: '₹5,000' },
+    ],
+  },
+  {
+    teams: 75,
+    prizes: [
+      { label: '1st Prize', rank: '1', sup: 'st', amount: '₹5,000' },
+      { label: '2nd Prize', rank: '2', sup: 'nd', amount: '₹5,000' },
+      { label: '3rd Prize', rank: '3', sup: 'rd', amount: '₹5,000' },
+    ],
+  },
+]
+
+// "We ran a poll" frame.
+export const POLL = { yes: 100, no: 19, asked: 150 }
 
 export const FAQS = [
   {
     q: 'What exactly is Catalyst?',
-    a: 'A 48-hour hackathon by the Technical Society. You solve real open source problems: the statements drop on Nov 17 at noon, you build until Nov 19 at noon, and the best teams pitch on Nov 20.',
+    a: 'A 24-hour intra-college hackathon by the Technical Society. You solve real open source problems: the statements drop on Nov 18 at 6 PM, you build until Nov 19 at 6 PM, and the top 10 teams pitch on campus on Nov 20.',
+  },
+  {
+    q: 'When do registrations close?',
+    a: 'Nov 18 at 5 PM IST, one hour before the problem statements are revealed. Late entries can’t be accepted once the statements are out.',
+  },
+  {
+    q: 'How big can my team be?',
+    a: 'Teams can have a maximum of 3 members.',
+  },
+  {
+    q: 'How much is the prize money?',
+    a: 'Cash prizes scale with participation. With 50 teams, the winner and the runner-up get ₹5,000 each. With 75 teams, the top 3 teams get ₹5,000 each.',
+  },
+  {
+    q: 'What do we submit?',
+    a: 'A pitch video with a demo of what you built, plus a PPT. Final submissions open on Nov 19 at 6 PM, when the build phase ends.',
+  },
+  {
+    q: 'Where does the pitching round happen?',
+    a: 'Offline, on campus, on Nov 20. The top 10 shortlisted teams pitch, and results and the prize ceremony follow the same day.',
   },
   {
     q: 'Do I need prior open source experience?',
@@ -57,22 +104,6 @@ export const FAQS = [
   {
     q: 'Which languages or stacks are allowed?',
     a: 'Anything that solves the problem: Go, Rust, Python, JS, C++ or whatever else fits. The problem statement decides the tools, not us.',
-  },
-  {
-    q: 'How much is the prize money?',
-    a: 'The prize pool depends on participation: the more teams register, the bigger it gets. Once registrations close, the final pool is announced and split across the top 3 teams.',
-  },
-  {
-    q: 'Where does the pitching round happen?',
-    a: 'The pitching round on Nov 20 is held offline. Venue and reporting time will be shared with registered teams closer to the date.',
-  },
-  {
-    q: 'How do I register?',
-    a: 'Hit any "Register now" button and fill in the Google Form. Team details, eligibility and contact info are all collected there.',
-  },
-  {
-    q: 'When are problem statements released?',
-    a: 'Tuesday, Nov 17 at 12:00 noon IST. The 48-hour build clock starts at that moment.',
   },
 ]
 
