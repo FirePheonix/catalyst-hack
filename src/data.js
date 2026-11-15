@@ -50,14 +50,35 @@ export const TIMELINE = [
   },
 ]
 
-// "Prize pool" frame: cash prizes scale with the number of teams.
+// Prize rule: every registered team adds ₹200 to the pool (prizes unlock at 25 teams).
+// One more winner every 25 teams; the pool is split equally between the winners.
+//   25 → ₹5,000 (1 winner)   30 → ₹6,000 (all to the winner)
+//   50 → ₹5,000 × 2          70 → ₹7,000 × 2          75 → ₹5,000 × 3  …
+export const PRIZE = { perTeam: 200, minTeams: 25, teamsPerWinner: 25 }
+
+export function prizeFor(teams) {
+  if (teams < PRIZE.minTeams) return { pool: 0, winners: 0, each: 0 }
+  const winners = Math.floor(teams / PRIZE.teamsPerWinner)
+  const pool = teams * PRIZE.perTeam
+  return { pool, winners, each: Math.round(pool / winners) }
+}
+
+export const formatINR = (n) => '₹' + Math.round(n).toLocaleString('en-IN')
+
+// "Prize pool" frame: the first team count of each winner bracket, plus how it grows.
 export const PRIZE_TIERS = [
+  {
+    teams: 25,
+    prizes: [{ label: 'Winner', amount: '₹5,000' }],
+    grows: '30 teams → ₹6,000 to winner',
+  },
   {
     teams: 50,
     prizes: [
       { label: '1st Prize', rank: '1', sup: 'st', amount: '₹5,000' },
       { label: 'Runner-up', amount: '₹5,000' },
     ],
+    grows: '70 teams → ₹7,000 each',
   },
   {
     teams: 75,
@@ -66,6 +87,7 @@ export const PRIZE_TIERS = [
       { label: '2nd Prize', rank: '2', sup: 'nd', amount: '₹5,000' },
       { label: '3rd Prize', rank: '3', sup: 'rd', amount: '₹5,000' },
     ],
+    grows: '+1 winner every 25 teams',
   },
 ]
 
@@ -110,7 +132,7 @@ export const FAQS = [
   },
   {
     q: 'How much is the prize money?',
-    a: 'Cash prizes scale with participation. With 50 teams, the winner and the runner-up get ₹5,000 each. With 75 teams, the top 3 teams get ₹5,000 each.',
+    a: 'Every registered team adds ₹200 to the prize pool, and prizes unlock at 25 teams. Every 25 teams adds one more winner, and the pool is split equally. 25 teams: ₹5,000 to the winner. 30 teams: ₹6,000, all to the winner. 50 teams: ₹5,000 each for the winner and runner-up. 70 teams: ₹7,000 each. 75 teams: ₹5,000 each for the top 3, and it keeps growing from there.',
   },
   {
     q: 'What do we submit?',

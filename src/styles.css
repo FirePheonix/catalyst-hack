@@ -1254,10 +1254,171 @@ a {
 }
 .tiers {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(20px, 3vw, 32px);
-  max-width: 900px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 2.4vw, 28px);
+  max-width: 1180px;
   margin: 52px auto 0;
+}
+.tiers .tier {
+  display: flex;
+  flex-direction: column;
+}
+.tiers .tier__list {
+  flex: 1;
+}
+.tiers .tier--rows .tier__trophy {
+  width: 42px;
+}
+.tiers .tier--rows .tier__label {
+  font-size: 17px;
+}
+.tiers .tier--rows .tier__amt {
+  font-size: 21px;
+  padding: 2px 10px;
+}
+.tier__grows {
+  margin: 22px 0 0;
+  padding-top: 12px;
+  border-top: 2px dashed currentColor;
+  font-family: var(--f-tiny);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+/* prize calculator */
+.calc {
+  position: relative;
+  z-index: 0;
+  max-width: 760px;
+  margin: 36px auto 0;
+  padding: 22px clamp(18px, 3vw, 30px) 24px;
+}
+.calc::before,
+.calc::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.calc::before {
+  z-index: -2;
+  background-image: var(--checker-blue);
+  background-size: 4px 4px;
+  transform: translate(8px, 8px);
+}
+.calc::after {
+  z-index: -1;
+  background: var(--card);
+  border: 2px solid var(--ink);
+}
+.calc__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px 20px;
+}
+.calc__label {
+  font-family: var(--f-tiny);
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.calc__label b {
+  display: inline-block;
+  min-width: 2.2em;
+  padding: 0 6px;
+  background: var(--blue);
+  color: #fff;
+  font-weight: 400;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.calc__pool {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: var(--f-sans);
+  font-weight: 800;
+  font-size: clamp(34px, 5vw, 48px);
+  line-height: 1;
+  color: var(--blue);
+  font-variant-numeric: tabular-nums;
+}
+.calc__pool small {
+  margin-top: 4px;
+  font-family: var(--f-tiny);
+  font-weight: 400;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.calc__range {
+  --p: 50%;
+  width: 100%;
+  height: 28px;
+  margin: 18px 0 16px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: linear-gradient(90deg, var(--blue) var(--p), transparent var(--p)) no-repeat center / 100% 14px;
+  border: 2px solid var(--ink);
+  cursor: pointer;
+}
+.calc__range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 34px;
+  background: var(--card);
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.calc__range::-moz-range-thumb {
+  width: 18px;
+  height: 30px;
+  border-radius: 0;
+  background: var(--card);
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.calc__winners {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.calc__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 2px solid var(--blue);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--blue);
+  font-family: var(--f-mono);
+  font-size: 15px;
+}
+.calc__chip span {
+  color: var(--ink);
+}
+.calc__chip b {
+  font-family: var(--f-sans);
+  font-weight: 800;
+  font-size: 18px;
+}
+.calc__chip--off {
+  border-style: dashed;
+  border-color: var(--ink-soft);
+  color: var(--ink-soft);
+  font-family: var(--f-tiny);
+  text-transform: uppercase;
+  font-size: 13px;
+}
+.calc__trophy {
+  width: 24px;
 }
 .tier,
 .mentor {
@@ -1799,6 +1960,10 @@ a {
 
 /* ───────────────────────── responsive ───────────────────────── */
 @media (max-width: 1100px) {
+  .tiers {
+    grid-template-columns: 1fr;
+    max-width: 560px;
+  }
   .hero__schedule {
     display: none;
   }

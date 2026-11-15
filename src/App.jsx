@@ -3,7 +3,7 @@ import DitherField from './components/DitherField.jsx'
 import DitherReveal from './components/DitherReveal.jsx'
 import { Countdown, DitherHeading, Kicker, RegisterButton, getStage, useNow } from './components/bits.jsx'
 import { HackathonDoodle, Laurel, PixelIcon, PixelTrophy, Rays, useInView } from './components/pixel.jsx'
-import { FAQS, IMG, MENTORS, POLL, PRIZE_TIERS, TIMELINE } from './data.js'
+import { FAQS, IMG, MENTORS, POLL, PRIZE, PRIZE_TIERS, TIMELINE, formatINR, prizeFor } from './data.js'
 
 const NAV = [
   ['about', 'About'],
@@ -122,7 +122,7 @@ function Hero({ now }) {
 }
 
 function Marquee() {
-  const items = ['catalyst', '24 hours', 'open source', 'nov 18 → 20', 'build', 'submit', 'pitch', 'up to ₹15,000 in prizes', 'register now']
+  const items = ['catalyst', '24 hours', 'open source', 'nov 18 → 20', 'build', 'submit', 'pitch', '₹200 per team prize pool', 'register now']
   const row = items.map((t, i) => (
     <span key={i}>
       {t}
@@ -177,8 +177,8 @@ function About() {
               <span className="stat__label">teams pitch on campus</span>
             </div>
             <div className="stat">
-              <span className="stat__num">15K</span>
-              <span className="stat__label">₹ max prize pool</span>
+              <span className="stat__num">200</span>
+              <span className="stat__label">₹ to the pool per team</span>
             </div>
           </div>
         </div>
@@ -336,13 +336,13 @@ function Prizes() {
             <Rays className="poster-head__rays" />
           </h2>
           <p className="poster-head__sub">
-            <span>Cash Prizes Based on Participation</span>
+            <span>₹200 Added for Every Team</span>
           </p>
         </header>
 
         <div className="tiers">
           {PRIZE_TIERS.map((tier) => (
-            <article key={tier.teams} className={`tier ${tier.prizes.length > 2 ? 'tier--rows' : 'tier--stack'}`}>
+            <article key={tier.teams} className={`tier ${tier.prizes.length > 1 ? 'tier--rows' : 'tier--stack'}`}>
               <header className="tier__head">
                 <Laurel />
                 <div>
@@ -369,13 +369,17 @@ function Prizes() {
                   </li>
                 ))}
               </ul>
+              <p className="tier__grows">{tier.grows}</p>
             </article>
           ))}
         </div>
 
         <p className="prizes__note">
-          The more teams register, the more prizes unlock: <b>₹10,000</b> at 50 teams, <b>₹15,000</b> at 75 teams.
+          Every team that registers adds <b>₹200</b> to the pool, and every <b>25 teams</b> adds another winner. The
+          pool is split equally, so it keeps growing: more teams, bigger pool, more winners.
         </p>
+
+        <PrizeCalc />
 
         <div className="finale" aria-hidden="true">
           <DitherReveal src={IMG.cloud1} className="finale__cloud finale__cloud--l drift-a" cell={6} />
@@ -398,6 +402,53 @@ function Prizes() {
         </div>
       </div>
     </section>
+  )
+}
+
+const PLACE = ['1st', '2nd', '3rd']
+
+/** Drag the team count, see the pool and how it splits. */
+function PrizeCalc() {
+  const [teams, setTeams] = useState(50)
+  const { pool, winners, each } = prizeFor(teams)
+  const min = PRIZE.minTeams - 5
+  const max = 150
+  return (
+    <div className="calc">
+      <div className="calc__top">
+        <label className="calc__label" htmlFor="calc-teams">
+          if <b>{teams}</b> teams register
+        </label>
+        <span className="calc__pool">
+          {winners ? formatINR(pool) : 'locked'}
+          <small>{winners ? 'prize pool' : `unlocks at ${PRIZE.minTeams} teams`}</small>
+        </span>
+      </div>
+      <input
+        id="calc-teams"
+        className="calc__range"
+        type="range"
+        min={min}
+        max={max}
+        step={1}
+        value={teams}
+        onChange={(e) => setTeams(Number(e.target.value))}
+        style={{ '--p': `${((teams - min) / (max - min)) * 100}%` }}
+      />
+      <ul className="calc__winners" aria-live="polite">
+        {winners === 0 ? (
+          <li className="calc__chip calc__chip--off">no prizes yet</li>
+        ) : (
+          Array.from({ length: winners }, (_, i) => (
+            <li key={i} className="calc__chip">
+              <PixelTrophy className="calc__trophy" />
+              <span>{winners === 1 ? 'Winner' : winners === 2 && i === 1 ? 'Runner-up' : PLACE[i] ?? `${i + 1}th`}</span>
+              <b>{formatINR(each)}</b>
+            </li>
+          ))
+        )}
+      </ul>
+    </div>
   )
 }
 
